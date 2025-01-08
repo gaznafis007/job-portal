@@ -6,10 +6,10 @@ export const baseApi = createApi({
         baseUrl: 'https://interview.pencilwoodbd.org/api/',
         prepareHeaders: (headers) =>{
             const accessToken = sessionStorage.getItem('accessToken');
+            headers.set("Content-type", "application/json");
             if(accessToken){
                 headers.set('Authorization', `Bearer ${accessToken}`)
             }
-            headers.set("Content-type", "application/json");
             return headers
         }
     }),
@@ -19,6 +19,9 @@ export const baseApi = createApi({
                 url: 'auth/register/',
                 method: 'POST',
                 body: userData,
+                headers: {
+                    'Content-Type' : 'application/json'
+                }
             }),
         }),
         loginUser: builder.mutation({
