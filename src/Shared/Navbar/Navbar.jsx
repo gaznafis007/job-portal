@@ -17,7 +17,7 @@ const Navbar = () => {
     },
     {
       name: "all jobs",
-      path: "/jobs",
+      path: "/allJob",
     },
   ];
   return (

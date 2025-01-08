@@ -1,16 +1,48 @@
-
 import { useState } from "react";
+import { useRegisterUserMutation } from "../../redux/api/baseApi";
+import { setCredential } from "../../redux/features/authSlice";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+
 
 const Register = () => {
+  const dispatch = useDispatch();
+  const [ registerUser, { isLoading, data:user, error }] = useRegisterUserMutation(); // Get registerUser mutation hook
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState(""); // Added role state
+  const navigate = useNavigate()
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Implement registration logic here
-    console.log({ username, email, password, role });
+    const data = {
+        username,
+        email,
+        role
+    }
+    // console.log(username, email, password, role)
+    try {
+      const response = await registerUser(data).unwrap();
+    
+      console.log(response, 'response')
+      
+      // Dispatch action to set credentials in Redux store
+      dispatch(
+        setCredential({
+          user: {
+            id: response?.id,
+            username: response?.username,
+            email: response?.email,
+            role: response?.role,
+          },
+        })
+      );
+      navigate('/signin')
+
+    } catch (err) {
+      console.error("Registration failed:", err);
+    }
   };
 
   return (
@@ -62,14 +94,15 @@ const Register = () => {
             >
               <option value="">Select a role</option>
               <option value="admin">Admin</option>
-              <option value="user">User</option>
+              {/* <option value="user">User</option> */}
             </select>
           </div>
           <button
             type="submit"
             className="w-full mt-4 py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700"
+            disabled={isLoading}
           >
-            Register
+            {isLoading ? 'Registering...' : 'Register'}
           </button>
         </form>
         <p className="text-center text-sm text-gray-600 mt-4">

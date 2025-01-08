@@ -52,7 +52,7 @@ const authSlice = createSlice({
         sessionStorage.setItem("accessToken", access);
         document.cookie = `refreshToken=${refresh}; path=/;`;
       }
-    ).addMatcher(baseApi.endpoints.refreshToken.matchFulfilled, (state, {payload}) =>{
+    ).addMatcher(baseApi.endpoints.refreshToken.matchFulfilled, (state, { payload }) =>{
         const { access } = payload;
         state.accessToken = access;
         sessionStorage.setItem('accessToken', access);

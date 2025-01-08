@@ -1,14 +1,34 @@
-
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { useLoginUserMutation } from "../../redux/api/baseApi";
+import { setCredential } from "../../redux/features/authSlice";
+import { useNavigate } from "react-router-dom";
+
+
 
 const SignIn = () => {
+  const dispatch = useDispatch();
+  const [loginUser, { isLoading, error }] = useLoginUserMutation(); // Get loginUser mutation hook
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate()
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Implement login logic here
-    console.log({ email, password });
+    try {
+      const res = await loginUser({ email, password });
+        const response = await res.json()
+      // Dispatch action to set credentials in Redux store
+      dispatch(
+        setCredential({
+          accessToken: response?.access,
+          refreshToken: response?.refresh,
+        })
+      );
+      navigate('/')
+    } catch (err) {
+      console.error("Login failed:", err);
+    }
   };
 
   return (
@@ -41,8 +61,9 @@ const SignIn = () => {
           <button
             type="submit"
             className="w-full mt-4 py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700"
+            disabled={isLoading}
           >
-            Sign In
+            {isLoading ? 'Signing In...' : 'Sign In'}
           </button>
         </form>
         <p className="text-center text-sm text-gray-600 mt-4">
