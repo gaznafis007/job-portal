@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useLoginUserMutation } from "../../redux/api/baseApi";
 import { setLogin } from "../../redux/features/authSlice";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 
 
@@ -67,7 +67,7 @@ const SignIn = () => {
           </button>
         </form>
         <p className="text-center text-sm text-gray-600 mt-4">
-          Dont have an account? <a href="/register" className="text-blue-600 hover:underline">Register</a>
+          Dont have an account? <Link href="/register" className="text-blue-600 hover:underline">Register</Link>
         </p>
       </div>
     </div>
