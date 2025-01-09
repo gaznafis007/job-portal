@@ -1,11 +1,21 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Button from "../../components/Button";
 import { HiMiniBars3 } from "react-icons/hi2";
 import { useState } from "react";
 import { RxCross2 } from "react-icons/rx";
+import { useDispatch, useSelector } from "react-redux";
+import { logOut } from "../../redux/features/authSlice";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
+  const navigate = useNavigate()
+  const {auth} = useSelector((state) => state)
+  console.log(auth)
+  const dispatch = useDispatch();
+  const handleLogout = () =>{
+    dispatch(logOut())
+    navigate('/signin')
+  }
   const navItems = [
     {
       name: "home",
@@ -31,9 +41,17 @@ const Navbar = () => {
         ))}
       </ul>
       <div className="hidden md:block">
-        <Button>
-          <Link to={"/signin"}> Sign in</Link>
-        </Button>
+      {
+              auth?.accessToken ? (
+                <Button handler={handleLogout}>
+              Logout
+            </Button>
+              ) : (
+                <Button>
+              <Link to={"/signin"}> Sign in</Link>
+            </Button>
+              )
+            }
       </div>
       <div className="flex flex-col space-y-3 md:hidden">
       {open ? (
@@ -55,9 +73,17 @@ const Navbar = () => {
             </li>
           ))}
           <li>
-            <Button>
+            {
+              auth?.accessToken ? (
+                <Button handler={handleLogout}>
+              Logout
+            </Button>
+              ) : (
+                <Button>
               <Link to={"/signin"}> Sign in</Link>
             </Button>
+              )
+            }
           </li>
         </ul>
       )}
