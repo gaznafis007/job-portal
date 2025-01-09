@@ -4,6 +4,7 @@ import Home from "../Pages/Home/Home";
 import SignIn from "../Pages/SignIn/SignIn";
 import Register from "../Pages/Register/Register";
 import AllJobs from "../Pages/AllJobs/AllJobs";
+import PrivateRoute from "../Pages/Private/PrivateRoute";
 
 export const router = createBrowserRouter([
     {
@@ -24,7 +25,7 @@ export const router = createBrowserRouter([
             },
             {
                 path: '/allJob',
-                element: <AllJobs/>
+                element: <PrivateRoute><AllJobs/></PrivateRoute>
             }
         ]
     }

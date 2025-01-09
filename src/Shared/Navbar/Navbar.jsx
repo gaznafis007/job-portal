@@ -10,7 +10,7 @@ const Navbar = () => {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate()
   const {auth} = useSelector((state) => state)
-  console.log(auth)
+  // console.log(auth)
   const dispatch = useDispatch();
   const handleLogout = () =>{
     dispatch(logOut())
