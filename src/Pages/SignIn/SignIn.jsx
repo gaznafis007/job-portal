@@ -25,7 +25,7 @@ const SignIn = () => {
           refreshToken: data?.refresh,
         })
       );
-      navigate('/allJob')
+      navigate('/')
     } catch (err) {
       console.error("Login failed:", err);
     }
