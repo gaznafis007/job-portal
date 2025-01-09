@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useLoginUserMutation } from "../../redux/api/baseApi";
-import { setCredential } from "../../redux/features/authSlice";
+import { setLogin } from "../../redux/features/authSlice";
 import { useNavigate } from "react-router-dom";
 
 
@@ -16,16 +16,16 @@ const SignIn = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await loginUser({ email, password });
-        const response = await res.json()
+      const {data} = await loginUser({ email, password });
+        console.log(data)
       // Dispatch action to set credentials in Redux store
       dispatch(
-        setCredential({
-          accessToken: response?.access,
-          refreshToken: response?.refresh,
+        setLogin({
+          accessToken: data?.access,
+          refreshToken: data?.refresh,
         })
       );
-      navigate('/')
+      navigate('/allJob')
     } catch (err) {
       console.error("Login failed:", err);
     }

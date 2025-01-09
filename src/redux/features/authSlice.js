@@ -2,12 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { baseApi } from "../api/baseApi";
 
 const initialState = {
-  user: {
-    id: "",
-    username: "",
-    email: "",
-    role: "",
-  },
+  user: {},
   accessToken: sessionStorage.getItem("accessToken") || "",
   refreshToken:
     document.cookie
@@ -22,20 +17,18 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     setCredentials: (state, { payload }) => {
-      const { user, accessToken, refreshToken } = payload;
+      const { user } = payload;
       state.user = user;
+    },
+    setLogin: (state, {payload}) =>{
+      const {accessToken, refreshToken} = payload
       state.accessToken = accessToken;
       state.refreshToken = refreshToken;
       sessionStorage.setItem("accessToken", accessToken);
       document.cookie = `refreshToken=${refreshToken}; path=/;`;
     },
     logOut: (state) => {
-      state.user = {
-        id: "",
-        username: "",
-        email: "",
-        role: "",
-      };
+      state.user = {};
       (state.accessToken = ""), (state.refreshToken = "");
       sessionStorage.removeItem("accessToken");
       document.cookie =
@@ -46,11 +39,11 @@ const authSlice = createSlice({
     builder.addMatcher(
       baseApi.endpoints.loginUser.matchFulfilled,
       (state, { payload }) => {
-        const { access, refresh } = payload;
-        state.accessToken = access;
-        state.refresh = refresh;
-        sessionStorage.setItem("accessToken", access);
-        document.cookie = `refreshToken=${refresh}; path=/;`;
+        const { accessToken, refreshToken } = payload;
+        state.accessToken = accessToken;
+        state.refreshToken = refreshToken;
+        sessionStorage.setItem("accessToken", accessToken);
+        document.cookie = `refreshToken=${refreshToken}; path=/;`;
       }
     ).addMatcher(baseApi.endpoints.refreshToken.matchFulfilled, (state, { payload }) =>{
         const { access } = payload;
@@ -60,5 +53,5 @@ const authSlice = createSlice({
   },
 });
 
-export const {setCredential, logout} = authSlice.actions
+export const { setCredentials, logout, setLogin} = authSlice.actions
 export default authSlice.reducer

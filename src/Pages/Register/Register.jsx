@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { useRegisterUserMutation } from "../../redux/api/baseApi";
-import { setCredential } from "../../redux/features/authSlice";
+import {setCredentials } from '../../redux/features/authSlice';
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
 
 const Register = () => {
   const dispatch = useDispatch();
-  const [ registerUser, { isLoading, data:user, error }] = useRegisterUserMutation(); // Get registerUser mutation hook
+  const [ registerUser, { isLoading, error }] = useRegisterUserMutation(); // Get registerUser mutation hook
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -19,6 +19,7 @@ const Register = () => {
     const data = {
         username,
         email,
+        password,
         role
     }
     // console.log(username, email, password, role)
@@ -28,15 +29,9 @@ const Register = () => {
       console.log(response, 'response')
       
       // Dispatch action to set credentials in Redux store
+      const user ={...response}
       dispatch(
-        setCredential({
-          user: {
-            id: response?.id,
-            username: response?.username,
-            email: response?.email,
-            role: response?.role,
-          },
-        })
+        setCredentials(user)
       );
       navigate('/signin')
 
@@ -94,6 +89,8 @@ const Register = () => {
             >
               <option value="">Select a role</option>
               <option value="admin">Admin</option>
+              <option value="freelancer">Freelancer</option>
+              <option value="client">Client</option>
               {/* <option value="user">User</option> */}
             </select>
           </div>
@@ -106,7 +103,7 @@ const Register = () => {
           </button>
         </form>
         <p className="text-center text-sm text-gray-600 mt-4">
-          Already have an account? <a href="/login" className="text-blue-600 hover:underline">Sign In</a>
+          Already have an account? <a href="/signin" className="text-blue-600 hover:underline">Sign In</a>
         </p>
       </div>
     </div>
