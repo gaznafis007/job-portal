@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Button from "../../components/Button";
 import { HiMiniBars3 } from "react-icons/hi2";
 import { useState } from "react";
@@ -8,13 +8,12 @@ import { logOut } from "../../redux/features/authSlice";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
-  const navigate = useNavigate()
+
   const {auth} = useSelector((state) => state)
   // console.log(auth)
   const dispatch = useDispatch();
   const handleLogout = () =>{
     dispatch(logOut())
-    navigate('/signin')
   }
   const navItems = [
     {
